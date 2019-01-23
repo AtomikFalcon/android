@@ -94,7 +94,9 @@ public class ManageAccountsActivity extends FileActivity
         setContentView(R.layout.accounts_layout);
 
         mListView = findViewById(R.id.account_list);
-        mListView.setFilterTouchesWhenObscured(true);
+        mListView.setFilterTouchesWhenObscured(
+                getResources().getBoolean(R.bool.disallow_light_filters)
+        );
 
         setupToolbar();
         updateActionBarTitleAndHomeButtonByString(getResources().getString(R.string.prefs_manage_accounts));

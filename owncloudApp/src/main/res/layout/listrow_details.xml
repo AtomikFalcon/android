@@ -26,7 +26,7 @@
     android:background="#fff"
     android:paddingLeft="@dimen/standard_padding"
     tools:context=".ui.activity.FileDisplayActivity"
-    android:filterTouchesWhenObscured="true"
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
     >
 
     <TextView

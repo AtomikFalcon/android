@@ -23,7 +23,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="@dimen/standard_padding"
-    android:filterTouchesWhenObscured="true"
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
     >
 
     <ProgressBar

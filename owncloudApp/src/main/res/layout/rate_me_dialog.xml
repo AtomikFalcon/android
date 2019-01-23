@@ -22,7 +22,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/standard_padding"
-    android:filterTouchesWhenObscured="true">
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters">
 
     <TextView
         android:id="@+id/rate_me_dialog_title_view"

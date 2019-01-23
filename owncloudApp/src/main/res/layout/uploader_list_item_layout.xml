@@ -23,7 +23,7 @@
     android:layout_height="72dp"
     android:background="@drawable/list_selector"
     android:orientation="horizontal"
-    android:filterTouchesWhenObscured="true"
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
     >
 
     <ImageView

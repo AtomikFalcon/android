@@ -33,7 +33,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     tools:context=".ui.preview.PreviewImageFragment"
-    android:filterTouchesWhenObscured="true"
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
     >
 
     <ProgressBar

@@ -529,7 +529,9 @@ public class FileDisplayActivity extends FileActivity
         // Prevent tapjacking
         View actionBarView = findViewById(R.id.action_bar);
         if (actionBarView != null) {
-            actionBarView.setFilterTouchesWhenObscured(true);
+            actionBarView.setFilterTouchesWhenObscured(
+                    getResources().getBoolean(R.bool.disallow_light_filters)
+            );
         }
 
         inflater.inflate(R.menu.main_menu, menu);

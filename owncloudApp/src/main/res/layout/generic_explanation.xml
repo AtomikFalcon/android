@@ -22,7 +22,7 @@
     android:background="@color/background_color" 
     android:id="@+id/explanation"
     android:orientation="vertical"
-    android:filterTouchesWhenObscured="true">
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters">
 
 	<TextView
 		android:id="@+id/message"

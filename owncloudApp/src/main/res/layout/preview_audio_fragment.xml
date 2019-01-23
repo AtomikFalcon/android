@@ -26,7 +26,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     tools:context=".ui.preview.PreviewAudioFragment"
-    android:filterTouchesWhenObscured="true">
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters">
 
     <FrameLayout
         android:id="@+id/visual_area"

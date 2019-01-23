@@ -24,7 +24,7 @@
     android:background="@drawable/list_selector"
     android:gravity="center"
     android:orientation="vertical"
-    android:filterTouchesWhenObscured="true">
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters">
 
     <FrameLayout
         android:layout_width="match_parent"

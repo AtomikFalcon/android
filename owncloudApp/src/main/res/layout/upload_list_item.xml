@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/standard_half_padding"
     android:paddingBottom="@dimen/standard_half_padding"
-    android:filterTouchesWhenObscured="true"
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
     >
 
     <FrameLayout

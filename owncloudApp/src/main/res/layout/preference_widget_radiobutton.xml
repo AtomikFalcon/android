@@ -20,5 +20,5 @@ inside android.R.layout.preference. -->
     android:layout_gravity="center"
     android:focusable="false"
     android:clickable="false"
-    android:filterTouchesWhenObscured="true"
+    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
     />
