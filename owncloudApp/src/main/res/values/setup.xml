@@ -105,5 +105,5 @@
     <bool name="use_drawer_logo">true</bool>
 
     <!-- Disallow light filters. WARNING: a false value compromise the app security, not preventing tapjacking attacks -->
-    <bool name="disallow_light_filters">false</bool>
+    <bool name="disallow_light_filters">true</bool>
 </resources>
