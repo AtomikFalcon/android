@@ -1,28 +1,30 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author masensio
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
+import com.owncloud.android.ui.activity.Preferences;
 
 import java.util.ArrayList;
 
@@ -45,10 +48,10 @@ public class ShareUserListAdapter extends ArrayAdapter {
     private ArrayList<OCShare> mShares;
     private ShareUserAdapterListener mListener;
 
-    public ShareUserListAdapter(Context context, int resource, ArrayList<OCShare>shares,
+    public ShareUserListAdapter(Context context, int resource, ArrayList<OCShare> shares,
                                 ShareUserAdapterListener listener) {
         super(context, resource);
-        mContext= context;
+        mContext = context;
         mShares = shares;
         mListener = listener;
     }
@@ -73,6 +76,12 @@ public class ShareUserListAdapter extends ArrayAdapter {
         LayoutInflater inflator = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflator.inflate(R.layout.share_user_item, parent, false);
+
+        // Allow or disallow touch filtering
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        view.setFilterTouchesWhenObscured(
+                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
 
         if (mShares != null && mShares.size() > position) {
             OCShare share = mShares.get(position);
@@ -112,6 +121,7 @@ public class ShareUserListAdapter extends ArrayAdapter {
 
     public interface ShareUserAdapterListener {
         void unshareButtonPressed(OCShare share);
+
         void editShare(OCShare share);
     }
 }

@@ -1,24 +1,24 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author Bartek Przybylski
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2011  Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.fragment;
 
@@ -33,7 +33,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.owncloud.android.MainApp;
@@ -80,7 +82,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      *
      * @param fileToDetail      An {@link OCFile} to show in the fragment
      * @param account           An ownCloud account; needed to start downloads
-     * @return                  New fragment with arguments set
+     * @return New fragment with arguments set
      */
     public static FileDetailFragment newInstance(OCFile fileToDetail, Account account) {
         FileDetailFragment frag = new FileDetailFragment();
@@ -93,7 +95,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     /**
      * Creates an empty details fragment.
-     * 
+     *
      * It's necessary to keep a public constructor without parameters; the system uses it when tries
      * to reinstantiate a fragment automatically.
      */
@@ -101,6 +103,10 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         super();
         mAccount = null;
         mLayout = R.layout.file_details_empty;
+
+        // Allow or disallow touch filtering
+        LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
+        fileDetailsEmptyLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
     }
 
     @Override
@@ -115,22 +121,26 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
-        setFile((OCFile) getArguments().getParcelable(ARG_FILE));
+        setFile(getArguments().getParcelable(ARG_FILE));
         mAccount = getArguments().getParcelable(ARG_ACCOUNT);
 
         if (savedInstanceState != null) {
-            setFile((OCFile) savedInstanceState.getParcelable(FileActivity.EXTRA_FILE));
+            setFile(savedInstanceState.getParcelable(FileActivity.EXTRA_FILE));
             mAccount = savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT);
         }
 
         if (getFile() != null && mAccount != null) {
             mLayout = R.layout.file_details_fragment;
+
+            // Allow or disallow touch filtering
+            ScrollView fdScrollView = getActivity().findViewById(R.id.fdScrollView);
+            fdScrollView.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
         }
 
         mView = inflater.inflate(mLayout, null);
-        
+
         if (mLayout == R.layout.file_details_fragment) {
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
         }
@@ -220,10 +230,10 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
         if (mContainerActivity.getStorageManager() != null) {
             FileMenuFilter mf = new FileMenuFilter(
-                getFile(),
-                mContainerActivity.getStorageManager().getAccount(),
-                mContainerActivity,
-                getActivity()
+                    getFile(),
+                    mContainerActivity.getStorageManager().getAccount(),
+                    mContainerActivity,
+                    getActivity()
             );
             mf.filter(menu, false, false);
         }
@@ -250,7 +260,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
 
         item = menu.findItem(R.id.action_switch_view);
-        if (item != null){
+        if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
@@ -300,7 +310,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 return true;
             }
             case R.id.action_cancel_sync: {
-                ((FileDisplayActivity)mContainerActivity).cancelTransference(getFile());
+                ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
                 return true;
             }
             case R.id.action_download_file:
@@ -313,17 +323,16 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 if (!getFile().isDown()) {  // Download the file                    
                     Log_OC.d(TAG, getFile().getRemotePath() + " : File must be downloaded");
                     ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
-                }
-                else {
+                } else {
                     mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
                 }
                 return true;
             }
-            case R.id.action_set_available_offline:{
+            case R.id.action_set_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
-            case R.id.action_unset_available_offline:{
+            case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
@@ -376,7 +385,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             setFilesize(file.getFileLength());
 
             setTimeModified(file.getModificationTimestamp());
-            
+
             // configure UI for depending upon local state of the file
             FileDownloaderBinder downloaderBinder = mContainerActivity.getFileDownloaderBinder();
             FileUploaderBinder uploaderBinder = mContainerActivity.getFileUploaderBinder();
@@ -387,9 +396,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 setButtonsForTransferring();
 
             } else if (file.isDown()) {
-                
+
                 setButtonsForDown();
-                
+
             } else {
                 // TODO load default preview image; when the local file is removed, the preview
                 // remains there
@@ -429,7 +438,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         String mimetype = file.getMimetype();
         TextView tv = getView().findViewById(R.id.fdType);
         if (tv != null) {
-			// mimetype      MIME type to set
+            // mimetype      MIME type to set
             String printableMimetype = DisplayUtils.convertMIMEtoPrettyPrint(mimetype);
             tv.setText(printableMimetype);
         }
@@ -467,10 +476,10 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     }
                 }
             } else {
-				// Name of the file, to deduce the icon to use in case the MIME type is not precise enough
-				String filename = file.getFileName();
+                // Name of the file, to deduce the icon to use in case the MIME type is not precise enough
+                String filename = file.getFileName();
                 iv.setImageResource(MimetypeIconUtil.getFileTypeIconId(mimetype, filename));
-			}
+            }
         }
     }
 
@@ -512,8 +521,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             //if (getFile().isDownloading()) {
             if (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, getFile())) {
                 progressText.setText(R.string.downloader_download_in_progress_ticker);
-            }
-            else {
+            } else {
                 if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, getFile())) {
                     progressText.setText(R.string.uploader_upload_in_progress_ticker);
                 }

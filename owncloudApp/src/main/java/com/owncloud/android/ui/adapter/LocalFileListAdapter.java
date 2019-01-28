@@ -25,6 +25,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -110,6 +112,12 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             LayoutInflater inflator = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflator.inflate(R.layout.list_item, null);
+
+            // Allow or disallow touch filtering
+            SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
+            view.setFilterTouchesWhenObscured(
+                    appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+            );
         }
         if (mFiles != null && mFiles.length > position) {
             File file = mFiles[position];

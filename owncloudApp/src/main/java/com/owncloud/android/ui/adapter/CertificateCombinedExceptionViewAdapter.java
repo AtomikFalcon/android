@@ -23,9 +23,13 @@ package com.owncloud.android.ui.adapter;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -44,6 +48,14 @@ public class CertificateCombinedExceptionViewAdapter implements SslUntrustedCert
     
     @Override
     public void updateErrorView(View dialogView) {
+        // Allow or disallow touch filtering
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(dialogView.getContext());
+
+        LinearLayout manageSpace = dialogView.findViewById(R.id.root);
+        manageSpace.setFilterTouchesWhenObscured(
+                appPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
+
         /// clean
         dialogView.findViewById(R.id.reason_no_info_about_error).setVisibility(View.GONE);
        

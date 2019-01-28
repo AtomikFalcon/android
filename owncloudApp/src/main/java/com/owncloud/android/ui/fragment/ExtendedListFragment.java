@@ -21,7 +21,9 @@
 
 package com.owncloud.android.ui.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -42,6 +44,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
+import com.owncloud.android.ui.activity.Preferences;
 
 import java.util.ArrayList;
 
@@ -157,11 +160,21 @@ public class ExtendedListFragment extends Fragment
         mListView.setOnItemClickListener(this);
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        mListFooterView.setFilterTouchesWhenObscured(
+                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
+
         mGridView = v.findViewById(R.id.grid_root);
         mGridView.setNumColumns(GridView.AUTO_FIT);
         mGridView.setOnItemClickListener(this);
 
         mGridFooterView = inflater.inflate(R.layout.list_footer, null, false);
+
+        mGridFooterView.setFilterTouchesWhenObscured(
+                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
 
         // Pull-down to refresh layout
         mRefreshListLayout = v.findViewById(R.id.swipe_containing_list);

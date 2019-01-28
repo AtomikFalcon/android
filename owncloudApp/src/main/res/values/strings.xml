@@ -37,6 +37,8 @@
     <string name="prefs_passcode">Passcode lock</string>
     <string name="prefs_fingerprint">Fingerprint lock</string>
     <string name="prefs_fingerprint_summary">Enable passcode or pattern lock to enable this option</string>
+    <string name="prefs_touch_filtering">Touch filtering</string>
+    <string name="prefs_touch_filtering_summary">Allow touches when the view is obscured by another visible window. Useful for light filtering apps.</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
     <string name="prefs_camera_video_upload">Video uploads</string>

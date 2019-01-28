@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -26,6 +27,8 @@ package com.owncloud.android.ui.dialog;
  * 
  *  Triggers the rename operation. 
  */
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
@@ -42,6 +45,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+import com.owncloud.android.ui.activity.Preferences;
 
 
 /**
@@ -78,6 +82,12 @@ public class RenameFileDialogFragment
         // Inflate the layout for the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.edit_box_dialog, null);
+
+        // Allow or disallow touch filtering
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        v.setFilterTouchesWhenObscured(
+                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
         
         // Setup layout 
         String currentName = mTargetFile.getFileName();

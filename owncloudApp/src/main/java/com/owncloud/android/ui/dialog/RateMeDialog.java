@@ -1,20 +1,19 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   Copyright (C) 2018 ownCloud GmbH.
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.dialog;
 
@@ -24,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
+import com.owncloud.android.ui.activity.Preferences;
 
 public class RateMeDialog extends DialogFragment {
 
@@ -61,7 +62,7 @@ public class RateMeDialog extends DialogFragment {
      *
      * @param packageName   The package name of the application
      * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
-     * @return              New dialog instance, ready to show.
+     * @return New dialog instance, ready to show.
      */
     public static RateMeDialog newInstance(String packageName, boolean cancelable) {
         RateMeDialog fragment = new RateMeDialog();
@@ -75,7 +76,13 @@ public class RateMeDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View v = inflater.inflate(R.layout.rate_me_dialog, container,  false);
+        View v = inflater.inflate(R.layout.rate_me_dialog, container, false);
+
+        // Allow or disallow touch filtering
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        v.setFilterTouchesWhenObscured(
+                appPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
 
         Button rateNowButton = v.findViewById(R.id.button_rate_now);
         Button laterButton = v.findViewById(R.id.button_later);
@@ -84,35 +91,29 @@ public class RateMeDialog extends DialogFragment {
 
         titleView.setText(String.format(getString(R.string.rate_dialog_title), getString(R.string.app_name)));
 
-        rateNowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String packageName = getArguments().getString(APP_PACKAGE_NAME);
-                Uri uri = Uri.parse(MARKET_DETAILS_URI + packageName);
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        rateNowButton.setOnClickListener(v1 -> {
+            String packageName = getArguments().getString(APP_PACKAGE_NAME);
+            Uri uri = Uri.parse(MARKET_DETAILS_URI + packageName);
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 
-                /// To count with Play market back stack, After pressing back button,
-                /// to taken back to our application, we need to add following flags to intent.
-                int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
-                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                {
-                    flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-                }
-                else
-                {
-                    flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
-                }
-                goToMarket.addFlags(flags);
-
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(PLAY_STORE_URI + packageName)));
-                }
-                dialog.dismiss();
+            /// To count with Play market back stack, After pressing back button,
+            /// to taken back to our application, we need to add following flags to intent.
+            int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+            } else {
+                flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
             }
+            goToMarket.addFlags(flags);
+
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(PLAY_STORE_URI + packageName)));
+            }
+            dialog.dismiss();
         });
 
         laterButton.setOnClickListener(new View.OnClickListener() {

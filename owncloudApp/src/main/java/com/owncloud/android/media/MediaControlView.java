@@ -1,29 +1,31 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.media;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,47 +46,55 @@ import java.util.Formatter;
 import java.util.Locale;
 
 import com.owncloud.android.R;
+import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.utils.DisplayUtils;
 
 
 /**
  * View containing controls for a {@link MediaPlayer}. 
- * 
+ *
  * Holds buttons "play / pause", "rewind", "fast forward" 
  * and a progress slider. 
- * 
+ *
  * It synchronizes itself with the state of the 
  * {@link MediaPlayer}.
  */
 
 public class MediaControlView extends FrameLayout implements OnClickListener, OnSeekBarChangeListener {
 
-    private MediaPlayerControl  mPlayer;
-    private Context             mContext;
-    private View                mRoot;
-    private ProgressBar         mProgress;
-    private TextView            mEndTime, mCurrentTime;
-    private boolean             mDragging;
-    private static final int    SHOW_PROGRESS = 1;
-    StringBuilder               mFormatBuilder;
-    Formatter                   mFormatter;
-    private ImageButton         mPauseButton;
-    private ImageButton         mFfwdButton;
-    private ImageButton         mRewButton;
-    
+    private MediaPlayerControl mPlayer;
+    private Context mContext;
+    private View mRoot;
+    private ProgressBar mProgress;
+    private TextView mEndTime, mCurrentTime;
+    private boolean mDragging;
+    private static final int SHOW_PROGRESS = 1;
+    StringBuilder mFormatBuilder;
+    Formatter mFormatter;
+    private ImageButton mPauseButton;
+    private ImageButton mFfwdButton;
+    private ImageButton mRewButton;
+
     public MediaControlView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        
+
         FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         );
         LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mRoot = inflate.inflate(R.layout.media_control, null);
+
+        // Allow or disallow touch filtering
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        mRoot.setFilterTouchesWhenObscured(
+                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
+
         initControllerView(mRoot);
         addView(mRoot, frameParams);
-        
+
         setFocusable(true);
         setFocusableInTouchMode(true);
         setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
@@ -96,7 +106,7 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
         mHandler.sendEmptyMessage(SHOW_PROGRESS);
         updatePausePlay();
     }
-    
+
     private void initControllerView(View v) {
         mPauseButton = v.findViewById(R.id.playBtn);
         if (mPauseButton != null) {
@@ -133,7 +143,7 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
 
     }
 
-    
+
     /**
      * Disable pause or seek buttons if the stream cannot be paused or seeked.
      * This requires the control interface to be a MediaPlayerControlExt
@@ -156,8 +166,8 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
             // the buttons.
         }
     }
-    
-    
+
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -179,7 +189,7 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
 
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
-        int hours   = totalSeconds / 3600;
+        int hours = totalSeconds / 3600;
 
         mFormatBuilder.setLength(0);
         if (hours > 0) {
@@ -199,7 +209,7 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
             if (duration > 0) {
                 // use long to avoid overflow
                 long pos = 1000L * position / duration;
-                mProgress.setProgress( (int) pos);
+                mProgress.setProgress((int) pos);
             }
             int percent = mPlayer.getBufferPercentage();
             mProgress.setSecondaryProgress(percent * 10);
@@ -212,14 +222,14 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
 
         return position;
     }
-    
+
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int keyCode = event.getKeyCode();
         final boolean uniqueDown = event.getRepeatCount() == 0
                 && event.getAction() == KeyEvent.ACTION_DOWN;
-        if (keyCode ==  KeyEvent.KEYCODE_HEADSETHOOK
+        if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK
                 || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
                 || keyCode == KeyEvent.KEYCODE_SPACE) {
             if (uniqueDown) {
@@ -291,31 +301,31 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
         int pos;
         boolean playing = mPlayer.isPlaying();
         switch (v.getId()) {
-        
-        case R.id.playBtn: 
-            doPauseResume();
-            break;
 
-        case R.id.rewindBtn:
-            pos = mPlayer.getCurrentPosition();
-            pos -= 5000;
-            mPlayer.seekTo(pos);
-            if (!playing) mPlayer.pause();  // necessary in some 2.3.x devices 
-            setProgress();
-            break;
+            case R.id.playBtn:
+                doPauseResume();
+                break;
 
-        case R.id.forwardBtn:
-            pos = mPlayer.getCurrentPosition();
-            pos += 15000;
-            mPlayer.seekTo(pos);
-            if (!playing) mPlayer.pause(); // necessary in some 2.3.x devices
-            setProgress();
-            break;
-        
+            case R.id.rewindBtn:
+                pos = mPlayer.getCurrentPosition();
+                pos -= 5000;
+                mPlayer.seekTo(pos);
+                if (!playing) mPlayer.pause();  // necessary in some 2.3.x devices
+                setProgress();
+                break;
+
+            case R.id.forwardBtn:
+                pos = mPlayer.getCurrentPosition();
+                pos += 15000;
+                mPlayer.seekTo(pos);
+                if (!playing) mPlayer.pause(); // necessary in some 2.3.x devices
+                setProgress();
+                break;
+
         }
     }
-    
-    
+
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (!fromUser) {
@@ -326,15 +336,15 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
 
         long duration = mPlayer.getDuration();
         long newposition = (duration * progress) / 1000L;
-        mPlayer.seekTo( (int) newposition);
+        mPlayer.seekTo((int) newposition);
         if (mCurrentTime != null)
-            mCurrentTime.setText(stringForTime( (int) newposition));
+            mCurrentTime.setText(stringForTime((int) newposition));
     }
-    
+
     /**
      * Called in devices with touchpad when the user starts to adjust the 
      * position of the seekbar's thumb.
-     * 
+     *
      * Will be followed by several onProgressChanged notifications.
      */
     @Override
@@ -343,7 +353,7 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
         mHandler.removeMessages(SHOW_PROGRESS);     // grants no more updates with media player progress while dragging 
     }
 
-    
+
     /**
      * Called in devices with touchpad when the user finishes the
      * adjusting of the seekbar.
@@ -367,5 +377,5 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
         super.onInitializeAccessibilityNodeInfo(info);
         info.setClassName(MediaControlView.class.getName());
     }
-    
+
 }

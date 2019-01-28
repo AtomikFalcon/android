@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author Shashvat Kedia
- *   Copyright (C) 2018 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -40,6 +41,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -85,6 +87,10 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         super.onCreate(savedInstanceState); 
 
         setContentView(R.layout.files_folder_picker);     // beware - inflated in other activities too
+
+        // Allow or disallow touch filtering
+        LinearLayout filesFolderPickerLayout = findViewById(R.id.filesFolderPickerLayout);
+        filesFolderPickerLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
         
         if (savedInstanceState == null) {
             createFragments();

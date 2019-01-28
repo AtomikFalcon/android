@@ -66,6 +66,10 @@
         <android.preference.CheckBoxPreference
             android:key="set_fingerprint"
             android:title="@string/prefs_fingerprint" />
+        <android.preference.CheckBoxPreference
+            android:key="allow_touch_filtering"
+            android:summary="@string/prefs_touch_filtering_summary"
+            android:title="@string/prefs_touch_filtering" />
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -1,22 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author masensio
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -31,6 +31,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
@@ -45,10 +46,20 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
     private static final String LIB_FOLDER = "lib";
 
+    private SharedPreferences mAppPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_space);
+
+        mAppPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        // Allow or disallow touch filtering
+        LinearLayout manageSpaceLayout = findViewById(R.id.manage_space_layout);
+        manageSpaceLayout.setFilterTouchesWhenObscured(
+                mAppPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -58,12 +69,9 @@ public class ManageSpaceActivity extends AppCompatActivity {
         descriptionTextView.setText(getString(R.string.manage_space_description, getString(R.string.app_name)));
 
         Button clearDataButton = findViewById(R.id.clearDataButton);
-        clearDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClearDataAsynTask clearDataTask = new ClearDataAsynTask();
-                clearDataTask.execute();
-            }
+        clearDataButton.setOnClickListener(v -> {
+            ClearDataAsynTask clearDataTask = new ClearDataAsynTask();
+            clearDataTask.execute();
         });
     }
 
@@ -77,7 +85,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 break;
             default:
                 Log_OC.w(TAG, "Unknown menu item triggered");
-                retval =  super.onOptionsItemSelected(item);
+                retval = super.onOptionsItemSelected(item);
         }
         return retval;
     }
@@ -85,7 +93,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
     /**
      * AsyncTask for Clear Data, saving the passcode
      */
-    private class ClearDataAsynTask extends AsyncTask<Void, Void, Boolean>{
+    private class ClearDataAsynTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -93,23 +101,30 @@ public class ManageSpaceActivity extends AppCompatActivity {
             boolean result = true;
 
             // Save passcode from Share preferences
-            SharedPreferences appPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(getApplicationContext());
 
-            boolean passCodeEnable = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-            boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
-            boolean fingerprintEnabled = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT,false);
+            boolean passCodeEnable = mAppPreferences.getBoolean(
+                    PassCodeActivity.PREFERENCE_SET_PASSCODE,
+                    false
+            );
+            boolean patternEnabled = mAppPreferences.getBoolean(
+                    PatternLockActivity.PREFERENCE_SET_PATTERN,
+                    false
+            );
+            boolean fingerprintEnabled = mAppPreferences.getBoolean(
+                    FingerprintActivity.PREFERENCE_SET_FINGERPRINT,
+                    false
+            );
 
             String passCodeDigits[] = new String[4];
             if (passCodeEnable) {
-                passCodeDigits[0] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D1, null);
-                passCodeDigits[1] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
-                passCodeDigits[2] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
-                passCodeDigits[3] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
+                passCodeDigits[0] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D1, null);
+                passCodeDigits[1] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
+                passCodeDigits[2] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
+                passCodeDigits[3] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
             }
             String patternValue = new String();
-            if(patternEnabled){
-                patternValue = appPrefs.getString(PatternLockActivity.KEY_PATTERN,null);
+            if (patternEnabled) {
+                patternValue = mAppPreferences.getString(PatternLockActivity.KEY_PATTERN, null);
             }
 
             // Clear data
@@ -131,15 +146,15 @@ public class ManageSpaceActivity extends AppCompatActivity {
             }
 
             // Recover pattern
-            if(patternEnabled){
-                appPrefsEditor.putString(PatternLockActivity.KEY_PATTERN,patternValue);
+            if (patternEnabled) {
+                appPrefsEditor.putString(PatternLockActivity.KEY_PATTERN, patternValue);
             }
 
             // Reenable fingerprint
             appPrefsEditor.putBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, fingerprintEnabled);
 
             appPrefsEditor.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, passCodeEnable);
-            appPrefsEditor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,patternEnabled);
+            appPrefsEditor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, patternEnabled);
             result = result && appPrefsEditor.commit();
 
             return result;
@@ -180,7 +195,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                     clearResult = false;
                 }
             }
-            return  clearResult;
+            return clearResult;
         }
     }
 }

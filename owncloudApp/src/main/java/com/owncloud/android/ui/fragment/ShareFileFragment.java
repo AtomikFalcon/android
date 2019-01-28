@@ -6,7 +6,7 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2018 ownCloud GmbH.
+ * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,6 +25,7 @@ package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -50,6 +51,7 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.ui.activity.ShareActivity;
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
@@ -448,8 +450,12 @@ public class ShareFileFragment extends Fragment
             usersList.setVisibility(View.GONE);
         }
 
-        // Set Scroll to initial position
         ScrollView scrollView = getView().findViewById(R.id.shareScroll);
+
+        // Allow or disallow touch filtering
+        scrollView.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+
+        // Set Scroll to initial position
         scrollView.scrollTo(0, 0);
     }
 
@@ -545,6 +551,10 @@ public class ShareFileFragment extends Fragment
 
         // Set Scroll to initial position
         ScrollView scrollView = getView().findViewById(R.id.shareScroll);
+
+        // Allow or disallow touch filtering
+        scrollView.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+
         scrollView.scrollTo(0, 0);
     }
 
@@ -647,5 +657,10 @@ public class ShareFileFragment extends Fragment
         }
 
         return enableMultiplePublicShare;
+    }
+
+    private boolean shouldAllowTouchFiltering() {
+        SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getContext());
+        return appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true);
     }
 }

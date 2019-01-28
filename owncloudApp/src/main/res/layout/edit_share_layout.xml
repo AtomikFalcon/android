@@ -24,7 +24,6 @@
     android:layout_height="match_parent"
     tools:context="com.owncloud.android.ui.fragment.EditShareFragment"
     android:id="@+id/shareScroll"
-    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
     >
 
     <LinearLayout android:orientation="vertical"

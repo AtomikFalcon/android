@@ -1,30 +1,33 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.dialog;
 
 import com.owncloud.android.R;
+import com.owncloud.android.ui.activity.Preferences;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
@@ -52,7 +55,7 @@ public class LoadingDialog extends DialogFragment {
      *
      * @param messageId     Resource id for a message to show in the dialog.
      * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
-     * @return              New dialog instance, ready to show.
+     * @return New dialog instance, ready to show.
      */
     public static LoadingDialog newInstance(int messageId, boolean cancelable) {
         LoadingDialog fragment = new LoadingDialog();
@@ -66,20 +69,26 @@ public class LoadingDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View v = inflater.inflate(R.layout.loading_dialog, container,  false);
-        
+        View v = inflater.inflate(R.layout.loading_dialog, container, false);
+
+        // Allow or disallow touch filtering
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        v.setFilterTouchesWhenObscured(
+                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
+
         // set message
-        TextView tv  = v.findViewById(R.id.loadingText);
+        TextView tv = v.findViewById(R.id.loadingText);
         int messageId = getArguments().getInt(ARG_MESSAGE_ID, R.string.placeholder_sentence);
         tv.setText(messageId);
 
         // set progress wheel color
-        ProgressBar progressBar  = v.findViewById(R.id.loadingBar);
+        ProgressBar progressBar = v.findViewById(R.id.loadingBar);
         progressBar.getIndeterminateDrawable().setColorFilter(
-            ContextCompat.getColor(getActivity(), R.color.color_accent),
-            PorterDuff.Mode.SRC_IN
+                ContextCompat.getColor(getActivity(), R.color.color_accent),
+                PorterDuff.Mode.SRC_IN
         );
-        
+
         return v;
     }
 

@@ -1,22 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.preview;
 
@@ -35,6 +35,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -52,10 +53,10 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     private static final String EXTRA_ERROR = "ERROR";
-    
+
     private static final String ARG_FILE = "FILE";
     private static final String ARG_IGNORE_FIRST = "IGNORE_FIRST";
-    private static final String ARG_ACCOUNT = "ACCOUNT" ;
+    private static final String ARG_ACCOUNT = "ACCOUNT";
 
     private Account mAccount;
 
@@ -94,7 +95,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
     /**
      * Creates an empty details fragment.
-     * 
+     *
      * It's necessary to keep a public constructor without parameters; the system uses it when tries to
      * reinstantiate a fragment automatically.
      */
@@ -110,8 +111,8 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        setFile((OCFile)args.getParcelable(ARG_FILE));
-            // TODO better in super, but needs to check ALL the class extending FileFragment; not right now
+        setFile((OCFile) args.getParcelable(ARG_FILE));
+        // TODO better in super, but needs to check ALL the class extending FileFragment; not right now
 
         mIgnoreFirstSavedState = args.getBoolean(ARG_IGNORE_FIRST);
         mAccount = args.getParcelable(ARG_ACCOUNT);
@@ -128,30 +129,29 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
                 setFile((OCFile) savedInstanceState.getParcelable(FileDownloadFragment.EXTRA_FILE));
                 mAccount = savedInstanceState.getParcelable(FileDownloadFragment.EXTRA_ACCOUNT);
                 mError = savedInstanceState.getBoolean(FileDownloadFragment.EXTRA_ERROR);
-            }
-            else {
+            } else {
                 mIgnoreFirstSavedState = false;
             }
         }
 
         View rootView = inflater.inflate(R.layout.file_download_fragment, container, false);
-        
+
         mProgressBar = rootView.findViewById(R.id.progressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
-        
-        (rootView.findViewById(R.id.fileDownloadLL)).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((PreviewImageActivity) getActivity()).toggleFullScreen();
-            }
-        });
+
+        LinearLayout fileDownloadLL = getActivity().findViewById(R.id.fileDownloadLL);
+
+        fileDownloadLL.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+
+        fileDownloadLL.setOnClickListener(v ->
+                ((PreviewImageActivity) getActivity()).toggleFullScreen()
+        );
 
         if (mError) {
             setButtonsForRemote(rootView);
-        }
-        else {
+        } else {
             setButtonsForTransferring(rootView);
         }
 
@@ -243,7 +243,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
     /**
      * Enables or disables buttons for a file not locally available
-     * <p/>
+     *
      * Currently, this is only used when a download was failed
      */
     private void setButtonsForRemote(View rootView) {

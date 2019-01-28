@@ -1,21 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * @author David González Verdugol
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.preview;
@@ -73,11 +73,11 @@ public class PreviewTextFragment extends FileFragment {
      *
      * @param file                      An {@link OCFile} to preview in the fragment
      * @param account                   ownCloud account containing file
-     * @return                          Fragment ready to be used.
+     * @return Fragment ready to be used.
      */
     public static PreviewTextFragment newInstance(
-        OCFile file,
-        Account account
+            OCFile file,
+            Account account
     ) {
         PreviewTextFragment frag = new PreviewTextFragment();
         Bundle args = new Bundle();
@@ -89,10 +89,10 @@ public class PreviewTextFragment extends FileFragment {
 
     /**
      * Creates an empty fragment for previews.
-     * <p/>
+     *
      * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      * (for instance, when the device is turned a aside).
-     * <p/>
+     *
      * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      * construction
      */
@@ -110,8 +110,9 @@ public class PreviewTextFragment extends FileFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Log_OC.e(TAG, "onCreateView");
 
-
         View ret = inflater.inflate(R.layout.preview_text_fragment, container, false);
+        ret.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+
         mProgressBar = ret.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mTextPreview = ret.findViewById(R.id.text_preview);
@@ -341,7 +342,7 @@ public class PreviewTextFragment extends FileFragment {
         }
 
         item = menu.findItem(R.id.action_switch_view);
-        if (item != null){
+        if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
@@ -390,11 +391,11 @@ public class PreviewTextFragment extends FileFragment {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-            case R.id.action_set_available_offline:{
+            case R.id.action_set_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
-            case R.id.action_unset_available_offline:{
+            case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }

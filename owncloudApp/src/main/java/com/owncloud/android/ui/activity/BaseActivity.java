@@ -1,3 +1,21 @@
+/**
+ * ownCloud Android client application
+ *
+ * Copyright (C) 2019 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
@@ -6,6 +24,7 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.OperationCanceledException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -56,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private FileDataStorageManager mStorageManager = null;
 
     @Override
-    protected void onNewIntent (Intent intent) {
+    protected void onNewIntent(Intent intent) {
         Log_OC.v(TAG, "onNewIntent() start");
         Account current = AccountUtils.getCurrentOwnCloudAccount(this);
         if (current != null && mCurrentAccount != null && !mCurrentAccount.name.equals(current.name)) {
@@ -66,8 +85,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     *  Since ownCloud {@link Account}s can be managed from the system setting menu, the existence of the {@link
-     *  Account} associated to the instance must be checked every time it is restarted.
+     * Since ownCloud {@link Account}s can be managed from the system setting menu, the existence of the {@link
+     * Account} associated to the instance must be checked every time it is restarted.
      */
     @Override
     protected void onRestart() {
@@ -133,8 +152,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Launches the account creation activity.
      *
-     * @param mandatoryCreation     When 'true', if an account is not created by the user, the app will be closed.
-     *                              To use when no ownCloud account is available.
+     * @param mandatoryCreation When 'true', if an account is not created by the user, the app will be closed.
+     *                          To use when no ownCloud account is available.
      */
     protected void createAccount(boolean mandatoryCreation) {
         AccountManager am = AccountManager.get(getApplicationContext());
@@ -149,7 +168,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Called when the ownCloud {@link Account} associated to the Activity was just updated.
-     *
+     * <p>
      * Child classes must grant that state depending on the {@link Account} is updated.
      */
     protected void onAccountSet(boolean stateWasRecovered) {
@@ -226,7 +245,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         /**
          * Constuctor
          *
-         * @param mandatoryCreation     When 'true', if an account was not created, the app is closed.
+         * @param mandatoryCreation When 'true', if an account was not created, the app is closed.
          */
         public AccountCreationCallback(boolean mandatoryCreation) {
             mMandatoryCreation = mandatoryCreation;
@@ -273,5 +292,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                     0
             );
         }
+    }
+
+    public boolean shouldAllowTouchFiltering() {
+        SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        return appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true);
     }
 }

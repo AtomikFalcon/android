@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -22,12 +23,14 @@
 package com.owncloud.android.ui.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+import com.owncloud.android.ui.activity.Preferences;
 
 
 /**
@@ -157,6 +160,10 @@ public abstract class FileFragment extends Fragment {
          * @param folder
          */
         void onBrowsedDownTo(OCFile folder);
+    }
 
+    public boolean shouldAllowTouchFiltering() {
+        SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getContext());
+        return appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true);
     }
 }

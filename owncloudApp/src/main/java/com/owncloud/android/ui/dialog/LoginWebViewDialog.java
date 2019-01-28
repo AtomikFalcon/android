@@ -5,7 +5,7 @@
  *   @author David A. Velasco
  *   @author David González Verdugo
  *   @author Christian Schabesberger
- *   Copyright (C) 2018 ownCloud GmbH.
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -27,9 +27,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +53,7 @@ import com.owncloud.android.authentication.SAMLWebViewClient;
 import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.AuthenticationMethod;
+import com.owncloud.android.ui.activity.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,6 +168,12 @@ public class LoginWebViewDialog extends DialogFragment {
         // Inflate layout of the dialog  
         RelativeLayout ssoRootView = (RelativeLayout) inflater.inflate(R.layout.webview_dialog,
                 container, false);  // null parent view because it will go in the dialog layout
+
+        // Allow or disallow touch filtering
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        ssoRootView.setFilterTouchesWhenObscured(
+                appPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
         
         if (mWebView == null) {
             // initialize the WebView

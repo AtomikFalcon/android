@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   @author Christian Schabesberger
- *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2018 ownCloud GmbH.
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * Copyright (C) 2011  Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -132,7 +131,7 @@ public class FileActivity extends DrawerActivity
         mHandler = new Handler();
         mFileOperationsHelper = new FileOperationsHelper(this);
         Account account = null;
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(FileActivity.EXTRA_FILE);
             mFromNotification = savedInstanceState.getBoolean(FileActivity.EXTRA_FROM_NOTIFICATION);
             mFileOperationsHelper.setOpIdWaitingFor(
@@ -184,7 +183,7 @@ public class FileActivity extends DrawerActivity
     }
 
     @Override
-    protected void onPause()  {
+    protected void onPause() {
         if (mOperationsServiceBinder != null) {
             mOperationsServiceBinder.removeOperationListener(this);
         }
@@ -220,7 +219,7 @@ public class FileActivity extends DrawerActivity
         outState.putParcelable(FileActivity.EXTRA_FILE, mFile);
         outState.putBoolean(FileActivity.EXTRA_FROM_NOTIFICATION, mFromNotification);
         outState.putLong(KEY_WAITING_FOR_OP_ID, mFileOperationsHelper.getOpIdWaitingFor());
-        if(getSupportActionBar() != null && getSupportActionBar().getTitle() != null) {
+        if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null) {
             // Null check in case the actionbar is used in ActionBar.NAVIGATION_MODE_LIST
             // since it doesn't have a title then
             outState.putString(KEY_ACTION_BAR_TITLE, getSupportActionBar().getTitle().toString());
@@ -231,7 +230,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Getter for the main {@link OCFile} handled by the activity.
      *
-     * @return  Main {@link OCFile} handled by the activity.
+     * @return Main {@link OCFile} handled by the activity.
      */
     public OCFile getFile() {
         return mFile;
@@ -390,7 +389,7 @@ public class FileActivity extends DrawerActivity
         // Show a dialog with the certificate info
         FragmentManager fm = getSupportFragmentManager();
         SslUntrustedCertDialog dialog = (SslUntrustedCertDialog) fm.findFragmentByTag(DIALOG_UNTRUSTED_CERT);
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = SslUntrustedCertDialog.newInstanceForFullSslError(
                     (CertificateCombinedException) result.getException());
             FragmentTransaction ft = fm.beginTransaction();
@@ -412,7 +411,7 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    protected void updateFileFromDB(){
+    protected void updateFileFromDB() {
         OCFile file = getFile();
         if (file != null) {
             file = getStorageManager().getFileByPath(file.getRemotePath());
@@ -457,9 +456,9 @@ public class FileActivity extends DrawerActivity
         mOperationsServiceBinder.addOperationListener(FileActivity.this, mHandler);
         long waitingForOpId = mFileOperationsHelper.getOpIdWaitingFor();
         if (waitingForOpId <= Integer.MAX_VALUE) {
-            boolean wait = mOperationsServiceBinder.dispatchResultIfFinished((int)waitingForOpId,
+            boolean wait = mOperationsServiceBinder.dispatchResultIfFinished((int) waitingForOpId,
                     this);
-            if (!wait ) {
+            if (!wait) {
                 dismissLoadingDialog();
             }
         }
@@ -506,14 +505,14 @@ public class FileActivity extends DrawerActivity
     }
 
     @Override
-    public void restart(){
+    public void restart() {
         Intent i = new Intent(this, FileDisplayActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
     @Override
-    public void allFilesOption(){
+    public void allFilesOption() {
         restart();
     }
 
@@ -540,7 +539,7 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onFailedSavingCertificate() {
         ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
-            R.string.ssl_validator_not_saved, new String[]{}, 0, android.R.string.ok, -1, -1
+                R.string.ssl_validator_not_saved, new String[]{}, 0, android.R.string.ok, -1, -1
         );
         dialog.show(getSupportFragmentManager(), DIALOG_CERT_NOT_SAVED);
     }
@@ -557,7 +556,7 @@ public class FileActivity extends DrawerActivity
      */
     public void showSnackMessage(String message) {
         final View rootView = findViewById(android.R.id.content);
-        if(rootView != null) {
+        if (rootView != null) {
             Snackbar.make(
                     rootView,
                     message,

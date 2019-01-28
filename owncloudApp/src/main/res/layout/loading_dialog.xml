@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2019 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -16,15 +15,12 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loadingLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/standard_padding"
-    android:filterTouchesWhenObscured="@bool/disallow_light_filters"
-    >
+    android:padding="@dimen/standard_padding">
 
     <ProgressBar
         android:id="@+id/loadingBar"
@@ -33,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:indeterminate="true"
-        android:indeterminateOnly="false"/>
+        android:indeterminateOnly="false" />
 
     <TextView
         android:id="@+id/loadingText"

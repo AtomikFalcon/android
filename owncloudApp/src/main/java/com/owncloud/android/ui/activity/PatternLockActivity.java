@@ -3,17 +3,18 @@
  *
  * @author Shashvat Kedia
  * @author Christian Schabesberger
- * Copyright (C) 2018 ownCloud GmbH.
- * <p>
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,6 +31,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrognito.patternlockview.PatternLockView;
@@ -67,6 +70,8 @@ public class PatternLockActivity extends AppCompatActivity {
     private TextView mPatternExplanation;
     private PatternLockView mPatternLockView;
 
+    private SharedPreferences mAppPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +79,19 @@ public class PatternLockActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.activity_pattern_lock);
+
+        mAppPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Allow or disallow touch filtering
+        RelativeLayout activityPatternLockLayout = findViewById(R.id.activityPatternLockLayout);
+        activityPatternLockLayout.setFilterTouchesWhenObscured(
+                mAppPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+        );
+
         String mPatternHeaderViewText = "";
         /**
-        * mPatternExpShouldVisible holds the boolean value that signifies weather the patternExpView should be visible or not.
-        * it is set to true when the pattern is set and when the pattern is removed.
+         * mPatternExpShouldVisible holds the boolean value that signifies weather the patternExpView should be visible or not.
+         * it is set to true when the pattern is set and when the pattern is removed.
          */
         boolean mPatternExpShouldVisible = false;
         mPatternHeader = findViewById(R.id.header_pattern);
@@ -186,8 +200,7 @@ public class PatternLockActivity extends AppCompatActivity {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
-        }
-        else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+        } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
             if (checkPattern()) {
                 Intent result = new Intent();
@@ -199,7 +212,7 @@ public class PatternLockActivity extends AppCompatActivity {
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
-              //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+            //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
             if (!mPatternPresent) {
                 requestPatternConfirmation();
             } else if (confirmPattern()) {
@@ -261,10 +274,8 @@ public class PatternLockActivity extends AppCompatActivity {
         mPatternExplanation.setVisibility(explanationVisibility);
     }
 
-    protected boolean checkPattern() {
-        SharedPreferences appPrefs = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext());
-        String savedPattern = appPrefs.getString(KEY_PATTERN, null);
+    private boolean checkPattern() {
+        String savedPattern = mAppPreferences.getString(KEY_PATTERN, null);
         return savedPattern != null && savedPattern.equals(mPatternValue);
     }
 
@@ -272,7 +283,7 @@ public class PatternLockActivity extends AppCompatActivity {
      * Enables or disables the cancel button to allow the user interrupt the ACTION
      * requested to the activity.
      *
-     * @param enabled  'True' makes the cancel button available, 'false' hides it.
+     * @param enabled 'True' makes the cancel button available, 'false' hides it.
      */
     protected void setCancelButtonEnabled(boolean enabled) {
         Button cancelButton = findViewById(R.id.cancel_pattern);
@@ -295,13 +306,13 @@ public class PatternLockActivity extends AppCompatActivity {
      * Overrides click on the BACK arrow to correctly cancel ACTION_ENABLE or ACTION_DISABLE, while
      * preventing than ACTION_CHECK may be worked around.
      *
-     * @param keyCode       Key code of the key that triggered the down event.
-     * @param event         Event triggered.
-     * @return              'True' when the key event was processed by this method.
+     * @param keyCode Key code of the key that triggered the down event.
+     * @param event   Event triggered.
+     * @return 'True' when the key event was processed by this method.
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()== 0){
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction()) ||
                     ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
                 finish();

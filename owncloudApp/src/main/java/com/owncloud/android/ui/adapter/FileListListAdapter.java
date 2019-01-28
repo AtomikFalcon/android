@@ -9,17 +9,17 @@
  * @author David González Verdugo
  * @author Shashvat Kedia
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2018 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2019 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,6 +28,7 @@ package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
@@ -52,6 +53,7 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -134,7 +136,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         View view = convertView;
         OCFile file = null;
         LayoutInflater inflator = (LayoutInflater) mContext
@@ -170,12 +171,17 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case LIST_ITEM:
                     view = inflator.inflate(R.layout.list_item, parent, false);
                     view.setTag(ViewType.LIST_ITEM);
+                    // Allow or disallow touch filtering
+                    SharedPreferences appPrefs = android.preference.PreferenceManager.
+                            getDefaultSharedPreferences(mContext);
+                    view.setFilterTouchesWhenObscured(
+                            appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                    );
                     break;
             }
         }
 
         if (file != null) {
-
             final ImageView localStateView = view.findViewById(R.id.localFileIndicator);
             final ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
@@ -185,6 +191,12 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             linearLayout.setContentDescription("LinearLayout-" + name);
+
+            // Allow or disallow touch filtering
+            SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
+            linearLayout.setFilterTouchesWhenObscured(
+                    appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+            );
 
             switch (viewType) {
                 case LIST_ITEM:
@@ -386,7 +398,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mFiles = null;
         }
 
-        mFiles = FileStorageUtils.sortFolder(mFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
+        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }
 
@@ -417,7 +429,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = ascending;
 
-        mFiles = FileStorageUtils.sortFolder(mFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
+        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }
 
