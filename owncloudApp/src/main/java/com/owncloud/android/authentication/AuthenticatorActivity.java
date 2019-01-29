@@ -307,7 +307,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// load user interface
         setContentView(R.layout.account_setup);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         FrameLayout loginLayout = findViewById(R.id.login_layout);
         loginLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)

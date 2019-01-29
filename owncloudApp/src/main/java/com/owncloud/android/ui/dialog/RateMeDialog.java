@@ -19,15 +19,14 @@ package com.owncloud.android.ui.dialog;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.content.DialogInterface;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,8 +77,7 @@ public class RateMeDialog extends DialogFragment {
         // Create a view by inflating desired layout
         View v = inflater.inflate(R.layout.rate_me_dialog, container, false);
 
-        // Allow or disallow touch filtering
-        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        // Allow or disallow touches with other visible windows
         v.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

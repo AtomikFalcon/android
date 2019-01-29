@@ -97,7 +97,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         if (convertView == null) {
             vi = mInflater.inflate(R.layout.uploader_list_item_layout, parent, false);
 
-            // Allow or disallow touch filtering
+            // Allow or disallow touches with other visible windows
             vi.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
             );

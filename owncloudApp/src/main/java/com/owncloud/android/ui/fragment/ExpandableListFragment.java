@@ -57,7 +57,7 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
 
         View v = inflater.inflate(R.layout.list_fragment_expandable, null);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         v.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

@@ -56,7 +56,7 @@ public class PrivacyPolicyActivity extends ToolbarActivity {
         final ProgressBar mProgressBar = findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout activityPrivacyPolicyLayout = findViewById(R.id.activityPrivacyPolicyLayout);
         activityPrivacyPolicyLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)

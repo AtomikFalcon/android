@@ -45,7 +45,7 @@ public class CertificateCombinedExceptionViewAdapter implements SslUntrustedCert
     
     @Override
     public void updateErrorView(View dialogView) {
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout manageSpace = dialogView.findViewById(R.id.root);
         manageSpace.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(dialogView.getContext())

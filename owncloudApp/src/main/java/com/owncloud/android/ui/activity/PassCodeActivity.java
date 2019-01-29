@@ -96,7 +96,7 @@ public class PassCodeActivity extends BaseActivity {
 
         setContentView(R.layout.passcodelock);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout passcodeLockLayout = findViewById(R.id.passcodeLockLayout);
         passcodeLockLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)

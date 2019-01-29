@@ -143,7 +143,7 @@ public class EditShareFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.edit_share_layout, container, false);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         view.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

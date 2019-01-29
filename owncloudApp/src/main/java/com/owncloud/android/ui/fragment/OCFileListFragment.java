@@ -249,7 +249,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
         }
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
         coordinatorLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())

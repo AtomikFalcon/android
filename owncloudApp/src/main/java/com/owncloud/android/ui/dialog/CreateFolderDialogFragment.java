@@ -78,7 +78,7 @@ public class CreateFolderDialogFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.edit_box_dialog, null);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         v.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

@@ -105,7 +105,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         mAccount = null;
         mLayout = R.layout.file_details_empty;
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
         fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
@@ -137,7 +137,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         if (getFile() != null && mAccount != null) {
             mLayout = R.layout.file_details_fragment;
 
-            // Allow or disallow touch filtering
+            // Allow or disallow touches with other visible windows
             ScrollView fdScrollView = getActivity().findViewById(R.id.fdScrollView);
             fdScrollView.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())

@@ -167,7 +167,7 @@ public class LoginWebViewDialog extends DialogFragment {
         RelativeLayout ssoRootView = (RelativeLayout) inflater.inflate(R.layout.webview_dialog,
                 container, false);  // null parent view because it will go in the dialog layout
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         ssoRootView.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

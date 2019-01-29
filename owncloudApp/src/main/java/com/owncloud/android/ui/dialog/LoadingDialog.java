@@ -69,7 +69,7 @@ public class LoadingDialog extends DialogFragment {
         // Create a view by inflating desired layout
         View v = inflater.inflate(R.layout.loading_dialog, container, false);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         v.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

@@ -730,7 +730,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.upload_list_group, null);
 
-            // Allow or disallow touch filtering
+            // Allow or disallow touches with other visible windows
             convertView.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mParentActivity)
             );

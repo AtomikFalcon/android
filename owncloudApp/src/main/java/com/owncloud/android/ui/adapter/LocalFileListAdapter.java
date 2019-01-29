@@ -111,7 +111,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflator.inflate(R.layout.list_item, null);
 
-            // Allow or disallow touch filtering
+            // Allow or disallow touches with other visible windows
             view.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
             );

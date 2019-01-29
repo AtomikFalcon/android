@@ -170,7 +170,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case LIST_ITEM:
                     view = inflator.inflate(R.layout.list_item, parent, false);
                     view.setTag(ViewType.LIST_ITEM);
-                    // Allow or disallow touch filtering
+                    // Allow or disallow touches with other visible windows
                     view.setFilterTouchesWhenObscured(
                             PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
                     );
@@ -189,7 +189,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             linearLayout.setContentDescription("LinearLayout-" + name);
 
-            // Allow or disallow touch filtering
+            // Allow or disallow touches with other visible windows
             linearLayout.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
             );

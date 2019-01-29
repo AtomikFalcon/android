@@ -88,7 +88,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         setContentView(R.layout.files_folder_picker);     // beware - inflated in other activities too
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout filesFolderPickerLayout = findViewById(R.id.filesFolderPickerLayout);
         filesFolderPickerLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)

@@ -51,7 +51,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_space);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout manageSpaceLayout = findViewById(R.id.manage_space_layout);
         manageSpaceLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)

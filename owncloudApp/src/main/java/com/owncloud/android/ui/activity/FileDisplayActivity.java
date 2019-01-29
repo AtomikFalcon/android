@@ -100,6 +100,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PermissionUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -530,7 +531,7 @@ public class FileDisplayActivity extends FileActivity
         View actionBarView = findViewById(R.id.action_bar);
         if (actionBarView != null) {
             actionBarView.setFilterTouchesWhenObscured(
-                    getResources().getBoolean(R.bool.disallow_light_filters)
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getApplicationContext())
             );
         }
 

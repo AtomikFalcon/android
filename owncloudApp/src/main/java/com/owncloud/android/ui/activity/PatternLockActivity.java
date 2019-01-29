@@ -78,7 +78,7 @@ public class PatternLockActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_pattern_lock);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         RelativeLayout activityPatternLockLayout = findViewById(R.id.activityPatternLockLayout);
         activityPatternLockLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)

@@ -85,7 +85,7 @@ public class ShareActivity extends FileActivity
 
         setContentView(R.layout.share_activity);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout shareActivityLayout = findViewById(R.id.share_activity_layout);
         shareActivityLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)

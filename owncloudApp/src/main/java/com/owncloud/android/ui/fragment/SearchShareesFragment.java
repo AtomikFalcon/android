@@ -119,7 +119,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.search_users_groups_layout, container, false);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         view.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

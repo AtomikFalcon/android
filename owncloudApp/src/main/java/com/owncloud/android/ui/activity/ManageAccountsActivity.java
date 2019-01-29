@@ -53,6 +53,7 @@ import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -95,7 +96,7 @@ public class ManageAccountsActivity extends FileActivity
 
         mListView = findViewById(R.id.account_list);
         mListView.setFilterTouchesWhenObscured(
-                getResources().getBoolean(R.bool.disallow_light_filters)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getApplicationContext())
         );
 
         setupToolbar();

@@ -331,7 +331,26 @@ public class Preferences extends PreferenceActivity {
             mPrefTouchesWithOtherVisibleWindows.setOnPreferenceChangeListener((preference, newValue) -> {
                         SharedPreferences.Editor appPrefs = PreferenceManager.
                                 getDefaultSharedPreferences(getApplicationContext()).edit();
-                        appPrefs.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, (Boolean) newValue);
+
+                        if ((Boolean) newValue) {
+                            showConfirmationDialog(
+                                    getString(R.string.confirmation_touches_with_other_windows_title),
+                                    getString(R.string.confirmation_touches_with_other_windows_message),
+                                    (dialog, which) -> {
+                                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                                            appPrefs.putBoolean(
+                                                    PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
+                                                    true
+                                            );
+                                        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                            mPrefTouchesWithOtherVisibleWindows.setChecked(false);
+                                        }
+                                        dialog.dismiss();
+                                    });
+                        } else {
+                            appPrefs.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false);
+                        }
+
                         appPrefs.apply();
 
                         return true;
@@ -521,7 +540,9 @@ public class Preferences extends PreferenceActivity {
             }
         } else {
             if (!initializing) {
-                showConfirmationDialog(getString(R.string.confirmation_disable_pictures_upload_message),
+                showConfirmationDialog(
+                        getString(R.string.confirmation_disable_camera_uploads_title),
+                        getString(R.string.confirmation_disable_pictures_upload_message),
                         (dialog, which) -> {
                             if (which == DialogInterface.BUTTON_NEGATIVE) {
                                 mPrefCameraPictureUploads.setChecked(true);
@@ -558,7 +579,9 @@ public class Preferences extends PreferenceActivity {
             }
         } else {
             if (!initializing) {
-                showConfirmationDialog(getString(R.string.confirmation_disable_videos_upload_message),
+                showConfirmationDialog(
+                        getString(R.string.confirmation_disable_camera_uploads_title),
+                        getString(R.string.confirmation_disable_videos_upload_message),
                         (dialog, which) -> {
                             if (which == DialogInterface.BUTTON_NEGATIVE) {
                                 mPrefCameraVideoUploads.setChecked(true);
@@ -937,9 +960,9 @@ public class Preferences extends PreferenceActivity {
      * @param message  message to show in the dialog
      * @param listener to handle button clicks
      */
-    private void showConfirmationDialog(String message, DialogInterface.OnClickListener listener) {
+    private void showConfirmationDialog(String title, String message, DialogInterface.OnClickListener listener) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(R.string.confirmation_disable_camera_uploads_title);
+        alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no), listener);
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes), listener);

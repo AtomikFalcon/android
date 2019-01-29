@@ -74,7 +74,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter {
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflator.inflate(R.layout.share_public_link_item, parent, false);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         view.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
         );

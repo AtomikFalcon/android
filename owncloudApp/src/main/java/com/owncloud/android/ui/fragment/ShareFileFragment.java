@@ -451,7 +451,7 @@ public class ShareFileFragment extends Fragment
 
         ScrollView scrollView = getView().findViewById(R.id.shareScroll);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         scrollView.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
@@ -553,7 +553,7 @@ public class ShareFileFragment extends Fragment
         // Set Scroll to initial position
         ScrollView scrollView = getView().findViewById(R.id.shareScroll);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         scrollView.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );

@@ -84,7 +84,7 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
         LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mRoot = inflate.inflate(R.layout.media_control, null);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         mRoot.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(context)
         );

@@ -107,14 +107,14 @@ public abstract class DrawerActivity extends ToolbarActivity {
     protected void setupDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         mDrawerLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         mNavigationView = findViewById(R.id.nav_view);
 
-        // Allow or disallow touch filtering
+        // Allow or disallow touches with other visible windows
         mNavigationView.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
