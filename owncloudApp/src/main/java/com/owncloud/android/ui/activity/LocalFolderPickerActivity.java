@@ -39,6 +39,7 @@ import android.widget.LinearLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 
@@ -104,7 +105,9 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
 
         // Allow or disallow touch filtering
         LinearLayout filesFolderPickerLayout = findViewById(R.id.filesFolderPickerLayout);
-        filesFolderPickerLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        filesFolderPickerLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         if (savedInstanceState == null) {
             createFragments();

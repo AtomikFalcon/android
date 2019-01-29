@@ -21,17 +21,12 @@
 
 package com.owncloud.android.ui.activity;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +46,12 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
+
+import java.io.File;
+import java.util.ArrayList;
 
 
 /**
@@ -119,9 +117,8 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
 
         // Allow or disable touch filtering
         LinearLayout alertDialogListViewLayout = findViewById(R.id.alertDialogListViewLayout);
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         alertDialogListViewLayout.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         /// load the list of local and remote files that failed

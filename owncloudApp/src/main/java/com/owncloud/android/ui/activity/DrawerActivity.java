@@ -25,12 +25,10 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -39,7 +37,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -54,6 +51,7 @@ import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  * Base class to handle setup of the drawer implementation including user switching and avatar fetching and fallback
@@ -110,16 +108,15 @@ public abstract class DrawerActivity extends ToolbarActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mDrawerLayout.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         mNavigationView = findViewById(R.id.nav_view);
 
         // Allow or disallow touch filtering
         mNavigationView.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         if (mNavigationView != null) {

@@ -23,14 +23,12 @@
 package com.owncloud.android.ui.fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.ui.activity.ComponentsGetter;
-import com.owncloud.android.ui.activity.Preferences;
 
 
 /**
@@ -160,10 +158,5 @@ public abstract class FileFragment extends Fragment {
          * @param folder
          */
         void onBrowsedDownTo(OCFile folder);
-    }
-
-    public boolean shouldAllowTouchFiltering() {
-        SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getContext());
-        return appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true);
     }
 }

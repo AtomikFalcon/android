@@ -69,7 +69,6 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
-import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.ui.activity.UploadFilesActivity;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -82,6 +81,7 @@ import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -251,9 +251,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
         // Allow or disallow touch filtering
         CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         coordinatorLayout.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
     }
 

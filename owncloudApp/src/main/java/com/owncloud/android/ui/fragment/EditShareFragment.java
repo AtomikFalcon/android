@@ -23,9 +23,7 @@
 package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -47,7 +45,7 @@ import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.Locale;
 
@@ -146,9 +144,8 @@ public class EditShareFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.edit_share_layout, container, false);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         view.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
 
         ((TextView) view.findViewById(R.id.editShareTitle)).setText(

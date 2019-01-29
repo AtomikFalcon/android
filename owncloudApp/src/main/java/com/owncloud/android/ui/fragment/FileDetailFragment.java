@@ -55,6 +55,7 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -106,7 +107,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
         // Allow or disallow touch filtering
         LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
-        fileDetailsEmptyLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
     }
 
     @Override
@@ -136,7 +139,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
             // Allow or disallow touch filtering
             ScrollView fdScrollView = getActivity().findViewById(R.id.fdScrollView);
-            fdScrollView.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+            fdScrollView.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+            );
         }
 
         mView = inflater.inflate(mLayout, null);

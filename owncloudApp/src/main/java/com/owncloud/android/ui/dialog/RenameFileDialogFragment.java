@@ -27,14 +27,13 @@ package com.owncloud.android.ui.dialog;
  * 
  *  Triggers the rename operation. 
  */
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
@@ -45,7 +44,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -84,9 +83,8 @@ public class RenameFileDialogFragment
         View v = inflater.inflate(R.layout.edit_box_dialog, null);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         v.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
         
         // Setup layout 

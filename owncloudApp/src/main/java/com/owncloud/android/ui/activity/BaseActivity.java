@@ -24,7 +24,6 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.OperationCanceledException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +38,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OCCapability;
 
 /**
- * Base Activity with common behaviour for activities dealing with ownCloud {@link Account}s .
+ * Base Activity with common behaviour for activities dealing with ownCloud {@link Account}s
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
@@ -292,10 +291,5 @@ public abstract class BaseActivity extends AppCompatActivity {
                     0
             );
         }
-    }
-
-    public boolean shouldAllowTouchFiltering() {
-        SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
-        return appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true);
     }
 }

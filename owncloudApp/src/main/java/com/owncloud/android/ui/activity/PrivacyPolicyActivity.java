@@ -33,6 +33,7 @@ import android.widget.ProgressBar;
 
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  * Activity to show the privacy policy to the user
@@ -57,7 +58,9 @@ public class PrivacyPolicyActivity extends ToolbarActivity {
 
         // Allow or disallow touch filtering
         LinearLayout activityPrivacyPolicyLayout = findViewById(R.id.activityPrivacyPolicyLayout);
-        activityPrivacyPolicyLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        activityPrivacyPolicyLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         WebView webview = findViewById(R.id.privacyPolicyWebview);
         webview.getSettings().setJavaScriptEnabled(true);

@@ -72,7 +72,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -108,7 +107,6 @@ import com.owncloud.android.operations.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
-import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.LoginWebViewDialog;
@@ -116,6 +114,7 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -310,9 +309,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         // Allow or disallow touch filtering
         FrameLayout loginLayout = findViewById(R.id.login_layout);
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         loginLayout.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         // Set login background color or image

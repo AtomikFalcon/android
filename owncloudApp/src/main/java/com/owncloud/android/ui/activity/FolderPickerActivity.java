@@ -54,10 +54,10 @@ import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
-import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -90,7 +90,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         // Allow or disallow touch filtering
         LinearLayout filesFolderPickerLayout = findViewById(R.id.filesFolderPickerLayout);
-        filesFolderPickerLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        filesFolderPickerLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
         
         if (savedInstanceState == null) {
             createFragments();

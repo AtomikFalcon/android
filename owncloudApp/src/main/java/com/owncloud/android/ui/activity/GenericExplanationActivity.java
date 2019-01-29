@@ -21,13 +21,9 @@
 
 package com.owncloud.android.ui.activity;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -39,7 +35,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
+
+import java.util.ArrayList;
 
 
 /**
@@ -77,9 +75,8 @@ public class GenericExplanationActivity extends AppCompatActivity {
 
         // Allow or disable touch filtering
         LinearLayout alertDialogListViewLayout = findViewById(R.id.alertDialogListViewLayout);
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         alertDialogListViewLayout.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         ListView listView = findViewById(R.id.list);

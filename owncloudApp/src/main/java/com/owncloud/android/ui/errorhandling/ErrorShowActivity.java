@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.ui.activity.BaseActivity;
+import com.owncloud.android.utils.PreferenceUtils;
 
 public class ErrorShowActivity extends BaseActivity {
 
@@ -42,7 +43,9 @@ public class ErrorShowActivity extends BaseActivity {
 
         // Allow or disallow touch filtering
         ScrollView errorHandlingShowErrorScrollView = findViewById(R.id.errorHandlingShowErrorScrollView);
-        errorHandlingShowErrorScrollView.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        errorHandlingShowErrorScrollView.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         mError = findViewById(R.id.errorTextView);
         mError.setText(getIntent().getStringExtra("error"));

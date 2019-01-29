@@ -52,6 +52,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -150,7 +151,9 @@ public class PreviewAudioFragment extends FileFragment {
         Log_OC.v(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
-        view.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        view.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
 
         mImagePreview = view.findViewById(R.id.image_preview);
         mMediaController = view.findViewById(R.id.media_controller);

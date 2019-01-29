@@ -23,15 +23,14 @@ package com.owncloud.android.ui.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +40,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.List;
 
@@ -70,8 +70,6 @@ public class PatternLockActivity extends AppCompatActivity {
     private TextView mPatternExplanation;
     private PatternLockView mPatternLockView;
 
-    private SharedPreferences mAppPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,12 +78,10 @@ public class PatternLockActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_pattern_lock);
 
-        mAppPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
-
         // Allow or disallow touch filtering
         RelativeLayout activityPatternLockLayout = findViewById(R.id.activityPatternLockLayout);
         activityPatternLockLayout.setFilterTouchesWhenObscured(
-                mAppPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         String mPatternHeaderViewText = "";
@@ -275,7 +271,8 @@ public class PatternLockActivity extends AppCompatActivity {
     }
 
     private boolean checkPattern() {
-        String savedPattern = mAppPreferences.getString(KEY_PATTERN, null);
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String savedPattern = appPreferences.getString(KEY_PATTERN, null);
         return savedPattern != null && savedPattern.equals(mPatternValue);
     }
 

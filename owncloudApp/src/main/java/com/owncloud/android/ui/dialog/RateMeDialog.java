@@ -38,7 +38,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 public class RateMeDialog extends DialogFragment {
 
@@ -81,7 +81,7 @@ public class RateMeDialog extends DialogFragment {
         // Allow or disallow touch filtering
         SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         v.setFilterTouchesWhenObscured(
-                appPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
 
         Button rateNowButton = v.findViewById(R.id.button_rate_now);

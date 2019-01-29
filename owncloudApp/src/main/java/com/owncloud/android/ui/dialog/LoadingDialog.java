@@ -20,14 +20,12 @@
 package com.owncloud.android.ui.dialog;
 
 import com.owncloud.android.R;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
@@ -72,9 +70,8 @@ public class LoadingDialog extends DialogFragment {
         View v = inflater.inflate(R.layout.loading_dialog, container, false);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         v.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
 
         // set message

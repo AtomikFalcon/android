@@ -21,11 +21,9 @@
 package com.owncloud.android.media;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -42,12 +40,12 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.owncloud.android.R;
+import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
+
 import java.util.Formatter;
 import java.util.Locale;
-
-import com.owncloud.android.R;
-import com.owncloud.android.ui.activity.Preferences;
-import com.owncloud.android.utils.DisplayUtils;
 
 
 /**
@@ -87,9 +85,8 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
         mRoot = inflate.inflate(R.layout.media_control, null);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         mRoot.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(context)
         );
 
         initControllerView(mRoot);

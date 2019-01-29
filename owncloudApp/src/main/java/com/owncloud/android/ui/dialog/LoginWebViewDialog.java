@@ -27,11 +27,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -53,7 +51,7 @@ import com.owncloud.android.authentication.SAMLWebViewClient;
 import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.AuthenticationMethod;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,9 +168,8 @@ public class LoginWebViewDialog extends DialogFragment {
                 container, false);  // null parent view because it will go in the dialog layout
 
         // Allow or disallow touch filtering
-        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         ssoRootView.setFilterTouchesWhenObscured(
-                appPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
         
         if (mWebView == null) {

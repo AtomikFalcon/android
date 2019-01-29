@@ -79,7 +79,7 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_REQUEST_PATTERN = 7;
     private static final int ACTION_CONFIRM_PATTERN = 8;
 
-    public static final String PREFERENCE_ALLOW_TOUCH_FILTERING = "allow_touch_filtering";
+    public static final String PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows";
 
     private PreferenceCategory mPrefCameraUploadsCategory;
     private CheckBoxPreference mPrefCameraPictureUploads;
@@ -102,7 +102,7 @@ public class Preferences extends PreferenceActivity {
     private FingerprintManager mFingerprintManager;
     private boolean patternSet;
     private boolean passcodeSet;
-    private CheckBoxPreference mPrefEnableTouchFiltering;
+    private CheckBoxPreference mPrefTouchesWithOtherVisibleWindows;
 
     private Preference mAboutApp;
     private AppCompatDelegate mDelegate;
@@ -252,7 +252,8 @@ public class Preferences extends PreferenceActivity {
         mPasscode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
         mPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
         mFingerprint = (CheckBoxPreference) findPreference(FingerprintActivity.PREFERENCE_SET_FINGERPRINT);
-        mPrefEnableTouchFiltering = (CheckBoxPreference) findPreference(PREFERENCE_ALLOW_TOUCH_FILTERING);
+        mPrefTouchesWithOtherVisibleWindows =
+                (CheckBoxPreference) findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS);
 
         // Passcode lock
         if (mPasscode != null) {
@@ -326,13 +327,12 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        // Allow light filtering
-        if (mPrefEnableTouchFiltering != null) {
-            mPrefEnableTouchFiltering.setOnPreferenceChangeListener((preference, newValue) -> {
+        if (mPrefTouchesWithOtherVisibleWindows != null) {
+            mPrefTouchesWithOtherVisibleWindows.setOnPreferenceChangeListener((preference, newValue) -> {
                         SharedPreferences.Editor appPrefs = PreferenceManager.
                                 getDefaultSharedPreferences(getApplicationContext()).edit();
-                        appPrefs.putBoolean(PREFERENCE_ALLOW_TOUCH_FILTERING, (Boolean) newValue);
-                        appPrefs.commit();
+                        appPrefs.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, (Boolean) newValue);
+                        appPrefs.apply();
 
                         return true;
                     }

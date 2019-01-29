@@ -28,7 +28,6 @@ package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
@@ -53,10 +52,10 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
-import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,10 +171,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     view = inflator.inflate(R.layout.list_item, parent, false);
                     view.setTag(ViewType.LIST_ITEM);
                     // Allow or disallow touch filtering
-                    SharedPreferences appPrefs = android.preference.PreferenceManager.
-                            getDefaultSharedPreferences(mContext);
                     view.setFilterTouchesWhenObscured(
-                            appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                            PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
                     );
                     break;
             }
@@ -193,9 +190,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             linearLayout.setContentDescription("LinearLayout-" + name);
 
             // Allow or disallow touch filtering
-            SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
             linearLayout.setFilterTouchesWhenObscured(
-                    appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
             );
 
             switch (viewType) {

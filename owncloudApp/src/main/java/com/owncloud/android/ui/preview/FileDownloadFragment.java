@@ -23,7 +23,6 @@ package com.owncloud.android.ui.preview;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.fragment.FileFragment;
 
@@ -41,6 +40,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -143,7 +143,9 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
         LinearLayout fileDownloadLL = getActivity().findViewById(R.id.fileDownloadLL);
 
-        fileDownloadLL.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        fileDownloadLL.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
 
         fileDownloadLL.setOnClickListener(v ->
                 ((PreviewImageActivity) getActivity()).toggleFullScreen()

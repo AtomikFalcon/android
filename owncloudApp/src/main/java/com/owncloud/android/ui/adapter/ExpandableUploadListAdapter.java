@@ -23,10 +23,8 @@ package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -43,10 +41,10 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
-import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
@@ -54,9 +52,9 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -733,9 +731,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             convertView = inflater.inflate(R.layout.upload_list_group, null);
 
             // Allow or disallow touch filtering
-            SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(mParentActivity);
             convertView.setFilterTouchesWhenObscured(
-                    appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mParentActivity)
             );
         }
         TextView tvGroupName = convertView.findViewById(R.id.uploadListGroupName);

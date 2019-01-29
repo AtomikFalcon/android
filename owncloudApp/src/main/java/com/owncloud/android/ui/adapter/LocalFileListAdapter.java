@@ -21,11 +21,7 @@
  */
 package com.owncloud.android.ui.adapter;
 
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.ThumbnailsCacheManager;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,13 +33,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -114,9 +112,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             view = inflator.inflate(R.layout.list_item, null);
 
             // Allow or disallow touch filtering
-            SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
             view.setFilterTouchesWhenObscured(
-                    appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
             );
         }
         if (mFiles != null && mFiles.length > position) {

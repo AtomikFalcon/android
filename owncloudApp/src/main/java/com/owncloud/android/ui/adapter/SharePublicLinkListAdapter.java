@@ -22,8 +22,6 @@ package com.owncloud.android.ui.adapter;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +31,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.resources.shares.OCShare;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -77,9 +75,8 @@ public class SharePublicLinkListAdapter extends ArrayAdapter {
         View view = inflator.inflate(R.layout.share_public_link_item, parent, false);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         view.setFilterTouchesWhenObscured(
-                appPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
         );
 
         if (mPublicLinks != null && mPublicLinks.size() > position) {

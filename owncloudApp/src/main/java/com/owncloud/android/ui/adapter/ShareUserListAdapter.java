@@ -22,9 +22,7 @@
 package com.owncloud.android.ui.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,7 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -78,9 +76,8 @@ public class ShareUserListAdapter extends ArrayAdapter {
         View view = inflator.inflate(R.layout.share_user_item, parent, false);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         view.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
         );
 
         if (mShares != null && mShares.size() > position) {

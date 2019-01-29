@@ -42,6 +42,7 @@ import android.widget.TextView;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.Arrays;
 
@@ -97,15 +98,21 @@ public class PassCodeActivity extends BaseActivity {
 
         // Allow or disallow touch filtering
         LinearLayout passcodeLockLayout = findViewById(R.id.passcodeLockLayout);
-        passcodeLockLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        passcodeLockLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         LinearLayout manageSpace = findViewById(R.id.root);
-        manageSpace.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        manageSpace.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         mBCancel = findViewById(R.id.cancel);
         mPassCodeHdr = findViewById(R.id.header);
         mPassCodeHdrExplanation = findViewById(R.id.explanation);
-        mPassCodeHdrExplanation.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        mPassCodeHdrExplanation.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
         mPassCodeEditTexts[0] = findViewById(R.id.txt0);
         mPassCodeEditTexts[0].requestFocus();
         getWindow().setSoftInputMode(

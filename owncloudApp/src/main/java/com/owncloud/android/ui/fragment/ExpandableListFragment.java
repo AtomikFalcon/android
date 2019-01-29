@@ -22,9 +22,7 @@
 
 package com.owncloud.android.ui.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  *  Extending ExtendedListFragment. This allows dividing list in groups.
@@ -60,9 +58,8 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
         View v = inflater.inflate(R.layout.list_fragment_expandable, null);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         v.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
 
         mEmptyListMessage = v.findViewById(R.id.empty_list_view);

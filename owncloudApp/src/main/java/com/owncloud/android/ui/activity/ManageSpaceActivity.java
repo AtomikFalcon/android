@@ -29,7 +29,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +36,7 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 
@@ -46,19 +46,15 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
     private static final String LIB_FOLDER = "lib";
 
-    private SharedPreferences mAppPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_space);
 
-        mAppPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
         // Allow or disallow touch filtering
         LinearLayout manageSpaceLayout = findViewById(R.id.manage_space_layout);
         manageSpaceLayout.setFilterTouchesWhenObscured(
-                mAppPreferences.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
         ActionBar actionBar = getSupportActionBar();
@@ -98,33 +94,34 @@ public class ManageSpaceActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            boolean result = true;
+            boolean result;
 
             // Save passcode from Share preferences
+            SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-            boolean passCodeEnable = mAppPreferences.getBoolean(
+            boolean passCodeEnable = appPreferences.getBoolean(
                     PassCodeActivity.PREFERENCE_SET_PASSCODE,
                     false
             );
-            boolean patternEnabled = mAppPreferences.getBoolean(
+            boolean patternEnabled = appPreferences.getBoolean(
                     PatternLockActivity.PREFERENCE_SET_PATTERN,
                     false
             );
-            boolean fingerprintEnabled = mAppPreferences.getBoolean(
+            boolean fingerprintEnabled = appPreferences.getBoolean(
                     FingerprintActivity.PREFERENCE_SET_FINGERPRINT,
                     false
             );
 
             String passCodeDigits[] = new String[4];
             if (passCodeEnable) {
-                passCodeDigits[0] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D1, null);
-                passCodeDigits[1] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
-                passCodeDigits[2] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
-                passCodeDigits[3] = mAppPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
+                passCodeDigits[0] = appPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D1, null);
+                passCodeDigits[1] = appPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
+                passCodeDigits[2] = appPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
+                passCodeDigits[3] = appPreferences.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
             }
             String patternValue = new String();
             if (patternEnabled) {
-                patternValue = mAppPreferences.getString(PatternLockActivity.KEY_PATTERN, null);
+                patternValue = appPreferences.getString(PatternLockActivity.KEY_PATTERN, null);
             }
 
             // Clear data

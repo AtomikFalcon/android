@@ -41,6 +41,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.adapter.LogListAdapter;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -72,7 +73,9 @@ public class LogHistoryActivity extends ToolbarActivity {
 
         // Allow or disallow touch filtering
         LinearLayout logsLayout = findViewById(R.id.logsLayout);
-        logsLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        logsLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         setupToolbar();
 

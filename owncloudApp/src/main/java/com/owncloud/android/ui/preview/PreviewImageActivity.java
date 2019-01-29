@@ -58,6 +58,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.Extras;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -144,7 +145,9 @@ public class PreviewImageActivity extends FileActivity implements
         );
 
         mViewPager = findViewById(R.id.fragmentPager);
-        mViewPager.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        mViewPager.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         int position = mHasSavedPosition ? mSavedPosition :
                 mPreviewImagePagerAdapter.getFilePosition(getFile());

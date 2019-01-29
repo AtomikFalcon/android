@@ -56,6 +56,7 @@ import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -86,7 +87,9 @@ public class ShareActivity extends FileActivity
 
         // Allow or disallow touch filtering
         LinearLayout shareActivityLayout = findViewById(R.id.share_activity_layout);
-        shareActivityLayout.setFilterTouchesWhenObscured(shouldAllowTouchFiltering());
+        shareActivityLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         // Set back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

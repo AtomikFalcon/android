@@ -36,7 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.owncloud.android.R;
@@ -46,6 +45,7 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -120,9 +120,8 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         View view = inflater.inflate(R.layout.search_users_groups_layout, container, false);
 
         // Allow or disallow touch filtering
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         view.setFilterTouchesWhenObscured(
-                appPrefs.getBoolean(Preferences.PREFERENCE_ALLOW_TOUCH_FILTERING, true)
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
         );
 
         // Get the SearchView and set the searchable configuration
