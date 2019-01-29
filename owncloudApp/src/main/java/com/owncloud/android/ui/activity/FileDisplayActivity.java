@@ -527,7 +527,7 @@ public class FileDisplayActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        // Prevent tapjacking
+        // Allow or disallow touches with other visible windows
         View actionBarView = findViewById(R.id.action_bar);
         if (actionBarView != null) {
             actionBarView.setFilterTouchesWhenObscured(

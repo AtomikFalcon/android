@@ -57,6 +57,7 @@ import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 
@@ -140,6 +141,10 @@ public class Preferences extends PreferenceActivity {
 
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
+
+        getListView().setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getApplicationContext())
+        );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mFingerprintManager = FingerprintManager.getFingerprintManager(this);

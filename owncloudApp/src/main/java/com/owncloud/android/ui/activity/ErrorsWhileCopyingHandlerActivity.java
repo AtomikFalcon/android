@@ -115,7 +115,7 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
         textView.setText(message);
         textView.setMovementMethod(new ScrollingMovementMethod());
 
-        // Allow or disable touch filtering
+        // Allow or disallow touches with other visible windows
         LinearLayout alertDialogListViewLayout = findViewById(R.id.alertDialogListViewLayout);
         alertDialogListViewLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
